@@ -2,6 +2,7 @@ class Calculator{
     constructor(previousinputTextElement,currentinputTextElement) {
         this.previousinputTextElement = previousinputTextElement
         this.currentinputTextElement = currentinputTextElement
+        this.operand = undefined
         this.clear()
     }
 
@@ -9,7 +10,7 @@ class Calculator{
     clear(){
         this.previousinput = ''
         this.currentinput = ''
-        this.operation = undefined
+        this.operand = undefined
     }
     
     delete(){
@@ -26,7 +27,7 @@ class Calculator{
         if(this.previousinput !== '') {
             this.compute()
         }
-        this.operand = this.operand
+        this.operand = operation
         this.previousinput = this.currentinput
         this.currentinput = ''
     }
@@ -64,9 +65,36 @@ class Calculator{
 
     }
 
+    getDisplay(number) {
+        // Displaying the numbers in the calculator in a formatted form 
+
+        //Display numbers before and after a decimal value when the data is formatted to have comma's
+        const numbersplit = number.toString() //converting the number into a string
+        const wholenumber = parseFloat(numbersplit.split('.')[0])
+        const decimalpartnumber = numbersplit.split('.')[1]
+        let integerDisplay
+        if (isNaN(wholenumber)) {
+            integerDisplay = ''
+        }else{
+            integerDisplay = wholenumber.toLocaleString('en',{maximumFractionDigits:0})
+        }
+        
+        if(decimalpartnumber != null) {
+            return `${integerDisplay}.${decimalpartnumber}`
+        }else{
+            return integerDisplay
+        }
+    }
+
     updateDisplay() {
-        this.currentinputTextElement.innerText = this.currentinput
-        this.previousinputTextElement.innerText = this.previousinput
+        this.currentinputTextElement.innerText = this.getDisplay(this.currentinput)
+        
+        if(this.operand != null){
+        this.previousinputTextElement.innerText = 
+        `${this.getDisplay(this.previousinput)} ${this.operand}`
+        }else{
+            this.previousinputTextElement.innerText = ''
+        }
 
     }
 }
